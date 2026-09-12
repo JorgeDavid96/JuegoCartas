@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -12,6 +13,7 @@ public class FrmJuego extends JFrame {
     JTabbedPane tpJugadores;
     Jugador jugador1 = new Jugador();
     Jugador jugador2 = new Jugador();
+    private Random r = new Random();
 
     public FrmJuego(){
         setSize(500, 300);
@@ -53,8 +55,44 @@ public class FrmJuego extends JFrame {
     }
 
     private void repartir(){
-        jugador1.repartir();
-        jugador2.repartir();
+        String entrada = JOptionPane.showInputDialog(this, "Con cuantos mazos deseas jugar");
+        int numMazos;
+
+        try {
+            numMazos = Integer.parseInt(entrada);
+            if (numMazos < 1) {
+                numMazos = 1;
+            }
+        } catch (Exception e) {
+            numMazos = 1;
+        }
+
+        int totalCartasMazo = numMazos * 52;
+        int[] mazo = new int[totalCartasMazo];
+        int pos = 0;
+        for (int i = 0; i < numMazos; i++) {
+            for ( int j = 1; j <= 52; j++) {
+                mazo[pos] = j;
+                pos++;
+            }
+        }
+
+        for (int i = totalCartasMazo - 1; i > 0; i--) {
+            int j = r.nextInt(i + 1);
+            int temp = mazo[i];
+            mazo[i] = mazo[j];
+            mazo[j] = temp;
+        }
+
+        int[] cartasJugador1 = new int[10];
+        int[] cartasJugador2 = new int[10];
+        for (int i = 0; i < 10; i++) {
+            cartasJugador1[i] = mazo[i];
+            cartasJugador2[i] = mazo[10 + i];
+        }
+
+        jugador1.repartir(cartasJugador1);;
+        jugador2.repartir(cartasJugador2);
         jugador1.mostrar(pnlJugador1);
         jugador2.mostrar(pnlJugador2);
     }

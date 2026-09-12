@@ -1,5 +1,3 @@
-import java.util.Random;
-
 import javax.swing.JPanel;
 
 public class Jugador {
@@ -7,13 +5,12 @@ public class Jugador {
     private final int Margen = 10;
     private final int Distancia = 40;
 
-    private Random r = new Random();
     private Carta[] cartas= new Carta[TotalCartas];
     private boolean[] cartasUsadas = new boolean[TotalCartas];
 
-    public void repartir(){
-        for(int i = 0; i < TotalCartas; i++){
-            cartas[i] = new Carta(r);
+    public void repartir(int[] cartasAsignadas){
+        for (int i = 0; i < TotalCartas; i++) {
+            cartas[i] = new Carta(cartasAsignadas[i]);
             cartasUsadas[i] = false;
         }
     }
@@ -47,6 +44,12 @@ public class Jugador {
             for(int i = 0; i < contadores.length; i++){
                 if (contadores[i] >= 2) {
                     respuesta += Grupo.values()[contadores[i]] + " de " + NombreCarta.values()[i] + "\n";
+
+                    for (int j = 0; j < cartas.length; j++) {
+                        if (cartas[j].getNombre().ordinal() == i) {
+                            cartasUsadas[j] = true;
+                        }
+                    }
                 }
             }
         }
