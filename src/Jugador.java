@@ -105,4 +105,38 @@ public class Jugador {
 
         return resultado;
     }
+
+    public String getSobrantes(){
+        String resultado = "Cartas Sobrantes.\n";
+        boolean haySobrantes = false;
+
+        for (int i = 0; i < cartas.length; i++) {
+            if (!cartasUsadas[i]) {
+                resultado += cartas[i].getNombre() + " de " + cartas[i].getPinta() + "\n";
+                haySobrantes = true;
+            }
+        }
+
+        if (!haySobrantes) {
+            resultado += "No hay cartas sobrantes";
+        }
+
+        return resultado;
+    }
+
+    public int getPuntaje() {
+        int total = 0;
+        for (int i = 0; i < cartas.length; i++) {
+            if (!cartasUsadas[i]) {
+                NombreCarta n = cartas[i].getNombre();
+
+                if (n == NombreCarta.AS || n == NombreCarta.JACK || n == NombreCarta.QUEEN || n == NombreCarta.KING) {
+                    total += 10;
+                } else {
+                    total += n.ordinal() + 1;
+                }
+            }
+        }
+        return total;
+    }
 }

@@ -62,17 +62,24 @@ public class FrmJuego extends JFrame {
     private void verificar(){
         String gruposEncontrados = "";
         String escalerasEncontradas = "";
+        String cartasSobrantes = "";
+        int totalCartas = 0;
         switch (tpJugadores.getSelectedIndex()) {
             case 0:
                 gruposEncontrados = jugador1.getGrupos();
                 escalerasEncontradas = jugador1.getEscaleras();
+                cartasSobrantes = jugador1.getSobrantes();
+                totalCartas = jugador1.getPuntaje();
                 break;
             case 1:
                 gruposEncontrados = jugador2.getGrupos();
                 escalerasEncontradas = jugador2.getEscaleras();
+                cartasSobrantes = jugador2.getSobrantes();
+                totalCartas = jugador2.getPuntaje();
+                break;
         }
 
-        String resultado = gruposEncontrados + "\n" + escalerasEncontradas;
+        String resultado = gruposEncontrados + "\n" + escalerasEncontradas + "\n" + cartasSobrantes + "\n" + "Total puntaje:\n" + totalCartas;
         JOptionPane.showMessageDialog(null, resultado);
     }
 }
