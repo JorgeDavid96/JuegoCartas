@@ -9,10 +9,12 @@ public class Jugador {
 
     private Random r = new Random();
     private Carta[] cartas= new Carta[TotalCartas];
+    private boolean[] cartasUsadas = new boolean[TotalCartas];
 
     public void repartir(){
         for(int i = 0; i < TotalCartas; i++){
             cartas[i] = new Carta(r);
+            cartasUsadas[i] = false;
         }
     }
 
@@ -50,5 +52,57 @@ public class Jugador {
         }
 
         return respuesta;
+    }
+
+    public String buscarEscalera(Pinta pinta, String nombrePinta) {
+        String resultado = "";
+        int[] posiciones = new int[13];
+        for (int i = 0; i < 13; i++) {
+            posiciones[i] = -1;
+        }
+
+        for (int i = 0; i < cartas.length; i++) {
+            if (cartas[i].getPinta() == pinta) {
+                posiciones[cartas[i].getNombre().ordinal()] = i;
+            }
+        }
+
+        int consecutivos = 0;
+        int inicio = -1;
+
+        for (int i = 0; i <= 13; i++) {
+            if (i < 13 && posiciones[i] != -1) {
+                if (consecutivos == 0) {
+                    inicio = i;
+                }
+                consecutivos++;
+            } else {
+                if (consecutivos >= 2) {
+                    NombreCarta nombreInicio = NombreCarta.values()[inicio];
+                    NombreCarta nombreFin = NombreCarta.values()[inicio + consecutivos - 1];
+                    resultado += Grupo.values()[consecutivos] + " de " + nombrePinta + " desde " + nombreInicio + " hasta " + nombreFin + "\n";
+                    for (int j = inicio; j < inicio + consecutivos; j++) {
+                        cartasUsadas[posiciones[j]] = true;
+                    }
+                }
+                consecutivos = 0;
+                }
+            }
+        return resultado;
+    }
+
+    public String getEscaleras(){
+        String resultado = "";
+        
+        resultado += buscarEscalera(Pinta.PICA, "Picas");
+        resultado += buscarEscalera(Pinta.CORAZON, "Corazones");
+        resultado += buscarEscalera(Pinta.DIAMANTE, "Diamante");
+        resultado += buscarEscalera(Pinta.TREBOL, "Trebol");
+
+        if (resultado.equals("")) {
+            resultado = "No se encontraron escaleras. \n";
+        }
+
+        return resultado;
     }
 }
